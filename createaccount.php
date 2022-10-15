@@ -77,5 +77,5 @@
         header('Location: home.php');
 	}
 
-    $db->close();
+    $db = null;
 ?>

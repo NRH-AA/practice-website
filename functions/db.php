@@ -1,64 +1,71 @@
 <?php
+	// Database Connection
 	function connectDB() {
 		$servername = "127.0.0.1";
 		$username = "root";
-		$password = "";
-		$dbname = "myweb";
-		$db = new mysqli($servername, $username, $password, $dbname);
-		return $db;
+		$password = "madkilla1";
+		$con = new PDO("mysql:host=$servername;dbname=myweb", $username, $password);
+		return $con;
 	}
 	
+	// Fetch blacklist IP's from database
 	function getBlackList($db) {
-		$result = $db->query("SELECT ip FROM blacklist");
 		$blacklist = array();
-		if ($result->num_rows <= 0) { return false; }
-		while($row = $result->fetch_assoc()) { 
-			array_push($blacklist, $row["ip"]);
+		$data = $db->query("SELECT ip FROM blacklist")->fetchAll();
+		foreach ($data as $row) {
+			array_push($blacklist, $row['ip']);
 		}
 		return $blacklist;
 	}
 	
+	// Check if login is valid and assign username
 	function login($db, $login, $password) {
-		$result = $db->query("SELECT * FROM accounts WHERE login = '$login' AND password = '$password'");
-		$accountArray = array();
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				$accountArray['id'] = $row['id'];
-				$accountArray['username'] = $row['username'];
-			}
+		// PDO::PARAM_INT | PDO::PARAM_STR
+		$statement = $db->prepare("SELECT username FROM accounts WHERE login = :loginBind AND password = :passwordBind");
+		$statement->bindParam(':loginBind', $login, PDO::PARAM_STR);
+		$statement->bindParam(':passwordBind', $password, PDO::PARAM_STR);
+		$statement->execute();
+		$user = $statement->fetch(PDO::FETCH_ASSOC);
+		if ($user) {
+			return $user['username'];
 		}
-		return $accountArray;
+		return false;
 	}
-
+	
+	// Check if username input is taken (create account)
 	function isUsernameTaken($db, $username) {
-		$result = $db->query("SELECT username FROM accounts WHERE username = '$username'");
-		$row = $result->fetch_assoc();
-		$res = $row['username'];
-		if (isset($res)) {
-			return true;
-		}
-		return false;
+		$statement = $db->prepare("SELECT username FROM accounts WHERE username = :usernameBind");
+		$statement->bindParam(':usernameBind', $username, PDO::PARAM_STR);
+		$statement->execute();
+		$user = $statement->fetch(PDO::FETCH_ASSOC);
+		return $user;
 	}
-
+	
+	// Check if email input is taken (create account)
 	function isEmailTaken($db, $email) {
-		$result = $db->query("SELECT email FROM accounts WHERE email = '$email'");
-		$row = $result->fetch_assoc();
-		$res = $row['email'];
-		if (isset($res)) {
-			return true;
-		}
-		return false;
+		$statement = $db->prepare("SELECT email FROM accounts WHERE email = :emailBind");
+		$statement->bindParam(':emailBind', $email, PDO::PARAM_STR);
+		$statement->execute();
+		$user = $statement->fetch(PDO::FETCH_ASSOC);
+		return $user;
 	}
-
+	
+	// Create new user account
 	function createAccount($db, $login, $password, $username, $email) {
-		$result = $db->query("INSERT INTO accounts (`login`, `password`, `username`, `email`, `serverid`) VALUES ('$login', '$password', '$username', '$email', 0)");
-		if ($result === true) {
+		$statement = $db->prepare("INSERT INTO accounts (`login`, `password`, `username`, `email`, `serverid`) VALUES
+													(:loginBind, :passwordBind, :usernameBind, :emailBind, 0)");
+		$statement->bindParam(':loginBind', $login, PDO::PARAM_STR);
+		$statement->bindParam(':passwordBind', $password, PDO::PARAM_STR);
+		$statement->bindParam(':usernameBind', $username, PDO::PARAM_STR);
+		$statement->bindParam(':emailBind', $email, PDO::PARAM_STR);
+		if ($statement->execute()) {
 			return true;
 		}
 		return false;
 	}
 	
-	function sanitize($input, $isEmail = false) {
+	// Sanitize input data
+	function sanitize($input, $ignoreSymbols = false) {
 		$arrayIllegal = array('select', 'delete', 'insert', 'update', 'script', 'echo', 'alert', 'prompt');
 		foreach ($arrayIllegal as $str) {
 			if (str_contains($input, $str)) {
@@ -66,9 +73,10 @@
 			}
 		}
 
-		if (!isset($isEmail)) {
+		if (!$ignoreSymbols) {
 			$input = preg_replace('/[^\p{L}\p{N}\s]/u', '', $input);
 		}
 		return $input;
 	}
+	
 ?>

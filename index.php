@@ -27,7 +27,7 @@
 	}
 
 	// Close database connection
-	$db->close();
+	$db = null;
 	
 	// Set client location. Used to allow access to the rest of the website.
 	$_SESSION['location'] = 'index';

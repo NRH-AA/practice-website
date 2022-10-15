@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-	$locationArray = array('home');
+	$locationArray = array('home', 'login');
 	if (!isset($_SESSION['location']) or !in_array($_SESSION['location'], $locationArray)) {
 		die("Cannot access page.");
 	}
@@ -36,11 +36,10 @@
 				
 				$account = login($db, $login, $password);
 				
-				if (!isset($account['id'])) {
+				if (!$account) {
 					$error = "Invalid account.";
 				} else {
-					$_SESSION['id'] = $account['id'];
-					$_SESSION['username'] = $account['username'];
+					$_SESSION['username'] = $account;
 				}
 			}
 		}
@@ -52,5 +51,5 @@
         header('Location: home.php');
 	}
 
-    $db->close();
+    $db = null;
 ?>
