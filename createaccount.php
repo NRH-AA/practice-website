@@ -42,7 +42,7 @@
 
             if (!isset($error)) {
 				$login = sanitize($login);
-				$password = sanitize($password);
+				$password = sanitize($password, true);
                 $password = sha1($password);
                 $username = sanitize($username);
                 $email = sanitize($email, true);
