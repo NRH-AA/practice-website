@@ -89,7 +89,7 @@
 	
 	// Sanitize input data
 	function sanitize($input, $ignoreSymbols = false) {
-		$arrayIllegal = array('select', 'delete', 'insert', 'update', 'script', 'echo', 'alert', 'prompt');
+		$arrayIllegal = array('select', 'delete', 'insert', 'update', 'script', 'echo', 'alert', 'prompt', '>', '<', '/');
 		foreach ($arrayIllegal as $str) {
 			if (str_contains($input, $str)) {
 				$input = str_replace($str, "", $input);
