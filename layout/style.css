@@ -4,6 +4,10 @@
 		background-color: black;
 		color: white;
 	}
+	a {
+		color: white;
+	}
+	
 	#container { /* Main container wraps all elements */
 		height: 90%;
 		width: 90%;
@@ -111,6 +115,17 @@
 		height: 225px;
 		resize: none;
 	}
+	
+	#showPosts {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		text-align: left;
+	}
+	#postDiv {
+		border: 2px solid black;
+		margin-top: 5px;
+	}
+	
 }
 
 

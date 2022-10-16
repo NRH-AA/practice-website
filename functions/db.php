@@ -11,7 +11,7 @@
 	// Fetch blacklist IP's from database
 	function getBlackList($db) {
 		$blacklist = array();
-		$data = $db->query("SELECT ip FROM blacklist")->fetchAll();
+		$data = $db->query("SELECT `ip` FROM `blacklist`")->fetchAll();
 		foreach ($data as $row) {
 			array_push($blacklist, $row['ip']);
 		}
@@ -21,7 +21,7 @@
 	// Check if login is valid and assign username
 	function login($db, $login, $password) {
 		// PDO::PARAM_INT | PDO::PARAM_STR
-		$statement = $db->prepare("SELECT username FROM accounts WHERE login = :loginBind AND password = :passwordBind");
+		$statement = $db->prepare("SELECT `username` FROM `accounts` WHERE login = :loginBind AND password = :passwordBind");
 		$statement->bindParam(':loginBind', $login, PDO::PARAM_STR);
 		$statement->bindParam(':passwordBind', $password, PDO::PARAM_STR);
 		$statement->execute();
@@ -34,7 +34,7 @@
 	
 	// Check if username input is taken (create account)
 	function isUsernameTaken($db, $username) {
-		$statement = $db->prepare("SELECT username FROM accounts WHERE username = :usernameBind");
+		$statement = $db->prepare("SELECT `username` FROM `accounts` WHERE username = :usernameBind");
 		$statement->bindParam(':usernameBind', $username, PDO::PARAM_STR);
 		$statement->execute();
 		$user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -43,7 +43,7 @@
 	
 	// Check if email input is taken (create account)
 	function isEmailTaken($db, $email) {
-		$statement = $db->prepare("SELECT email FROM accounts WHERE email = :emailBind");
+		$statement = $db->prepare("SELECT `email` FROM `accounts` WHERE email = :emailBind");
 		$statement->bindParam(':emailBind', $email, PDO::PARAM_STR);
 		$statement->execute();
 		$user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -52,7 +52,7 @@
 	
 	// Create new user account
 	function createAccount($db, $login, $password, $username, $email) {
-		$statement = $db->prepare("INSERT INTO accounts (`login`, `password`, `username`, `email`, `serverid`) VALUES
+		$statement = $db->prepare("INSERT INTO `accounts` (`login`, `password`, `username`, `email`, `serverid`) VALUES
 													(:loginBind, :passwordBind, :usernameBind, :emailBind, 0)");
 		$statement->bindParam(':loginBind', $login, PDO::PARAM_STR);
 		$statement->bindParam(':passwordBind', $password, PDO::PARAM_STR);
@@ -66,7 +66,7 @@
 	
 	// Create new post
 	function createPost($db, $username, $title, $text) {
-		$statement = $db->prepare("INSERT INTO posts (`owner`, `title`, `text`) VALUES
+		$statement = $db->prepare("INSERT INTO `posts` (`owner`, `title`, `text`) VALUES
 												(:usernameBind, :titleBind, :textBind)");
 		$statement->bindParam(':usernameBind', $username, PDO::PARAM_STR);
 		$statement->bindParam(':titleBind', $title, PDO::PARAM_STR);
@@ -80,10 +80,9 @@
 	// Get 10 most recent posts
 	function getRecentPosts($db) {
 		$posts = array();
-		$data = $db->query("SELECT `owner`, `title` FROM `posts` LIMIT 10")->fetchAll();
+		$data = $db->query("SELECT `owner`, `title`, `text` FROM `posts` LIMIT 10")->fetchAll();
 		foreach ($data as $row) {
-			
-			array_push($posts, array('owner' => $row['owner'], 'title' => $row['title']));
+			array_push($posts, array('owner' => $row['owner'], 'title' => $row['title'], 'text' => $row['text']));
 		}
 		return $posts;
 	}

@@ -22,9 +22,16 @@
 		<?php
 			$posts = getRecentPosts($db);
             foreach ($posts as $post) {
-                echo "<a href='../home.php'><h4>" . $post['title'] . "</h4></a>";
-            }
-		?>
+                ?>
+                <div id="postDiv">
+                    <tr>
+                        <th><a href='home.php'><h4><?php echo $post['title']; ?></h4></a></th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $post['text']; ?></td>
+                    </tr>
+                </div>
+        <?php } ?>
 	</div>
 
 <?php } ?>
