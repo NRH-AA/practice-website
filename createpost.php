@@ -13,8 +13,8 @@
         if (isset($_POST['createPostButton'])) {
             $username = $_SESSION['username'];
             // $date = date("m.d.y");
-            $title = $_POST['title'];
-            $text = $_POST['text'];
+            $title = sanitize($_POST['title'], true);
+            $text = sanitize($_POST['text'], true);
             
             if (!isset($title) or !isset($text)) {
                 $_SESSION['error'] = "You must enter a title and add text to the text area.";
