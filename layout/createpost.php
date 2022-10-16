@@ -23,13 +23,15 @@
 			$posts = getRecentPosts($db);
             foreach ($posts as $post) {
                 ?>
-                <div id="postDiv">
-                    <tr>
-                        <th><a href='home.php'><h4><?php echo $post['title']; ?></h4></a></th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $post['text']; ?></td>
-                    </tr>
+                <div>
+                    <table id="postTable">
+                        <tr>
+                            <th id="postTH"><a href='home.php'><h4 id="postH4"><?php echo $post['title']; ?></h4></a></th>
+                        </tr>
+                        <tr>
+                            <td><p id="postP"><?php echo $post['text']; ?><p></td>
+                        </tr>
+                    </table>
                 </div>
         <?php } ?>
 	</div>

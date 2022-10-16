@@ -14,6 +14,7 @@
 		margin: auto;
 		color: white;
 		text-align: center;
+		overflow: hidden;
 	}
 	img {
 		width: 100%;
@@ -121,10 +122,26 @@
 		grid-template-columns: 1fr 1fr 1fr;
 		text-align: left;
 	}
-	#postDiv {
+	#postTable {
+		text-align: center;
 		border: 2px solid black;
-		margin-top: 5px;
+		width: 400px;
+		margin-left: 10px;
+		margin-top: 10px;
 	}
+	#postTH {
+		padding-bottom: 0px;
+		border: 2px solid black;
+		background-color: #19367A;
+	}
+	#postH4 {
+		margin: 5px;
+	}
+	#postP {
+		background-color: #2148A2;
+		border: 2px solid black;
+	}
+
 	
 }
 
