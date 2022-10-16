@@ -64,6 +64,30 @@
 		return false;
 	}
 	
+	// Create new post
+	function createPost($db, $username, $title, $text) {
+		$statement = $db->prepare("INSERT INTO posts (`owner`, `title`, `text`) VALUES
+												(:usernameBind, :titleBind, :textBind)");
+		$statement->bindParam(':usernameBind', $username, PDO::PARAM_STR);
+		$statement->bindParam(':titleBind', $title, PDO::PARAM_STR);
+		$statement->bindParam(':textBind', $text, PDO::PARAM_STR);
+		if ($statement->execute()) {
+			return true;
+		}
+		return false;
+	}
+	
+	// Get 10 most recent posts
+	function getRecentPosts($db) {
+		$posts = array();
+		$data = $db->query("SELECT `owner`, `title` FROM `posts` LIMIT 10")->fetchAll();
+		foreach ($data as $row) {
+			
+			array_push($posts, array('owner' => $row['owner'], 'title' => $row['title']));
+		}
+		return $posts;
+	}
+	
 	// Sanitize input data
 	function sanitize($input, $ignoreSymbols = false) {
 		$arrayIllegal = array('select', 'delete', 'insert', 'update', 'script', 'echo', 'alert', 'prompt');

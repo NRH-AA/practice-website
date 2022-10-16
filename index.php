@@ -21,7 +21,7 @@
 		}
 	}
 
-	// Check if  IP was set. If not do not allow access to the website
+	// Check if IP was set. If not do not allow access to the website
 	if (!isset($clientIP)) {
 		die("Could not connect your IP.");
 	}
@@ -35,6 +35,6 @@
 	// Start a timer to disconnect client from session.
 	$_SESSION['timeout'] = time();
 
-	// Send client to /home.php
+	// Send client to home.php
 	header('Location: home.php');
 ?>

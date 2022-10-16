@@ -1,6 +1,11 @@
+<?php
+    include('functions/db.php');
+    $db = connectDB();
+?>
+
 <?php if (isset($_SESSION['createPost'])) { ?>
     <div id="createPost">
-        <form action="createpost.php">
+        <form action="createpost.php" method="post">
 
         <label for="title">Title</label> 
         <br><input id="title" class="loginForm loginInput createPostInput" type="text" name="title"><br>
@@ -12,4 +17,18 @@
         <input id="backButton" class="loginForm postsButton" type="submit" name="backButton" value="Back">
         </form>
     </div>
+<?php } else { ?>
+    <div id="showPosts">
+		<?php
+			$posts = getRecentPosts($db);
+            foreach ($posts as $post) {
+                echo "<a href='../home.php'><h4>" . $post['title'] . "</h4></a>";
+            }
+		?>
+	</div>
+
 <?php } ?>
+
+<?php
+    $db = null; 
+?>

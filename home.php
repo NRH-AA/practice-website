@@ -55,7 +55,11 @@
 
 			<div id="center">
 				<?php include('layout/createpost.php'); ?>
+				
 			</div>
+			
 		</div>
+		
 	</body>
+	
 </html>
